@@ -16,7 +16,7 @@ import {
   View,
 } from 'react-native';
 
-import {  Colors} from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 import NewModuleButton from './NewModuleButton';
 
@@ -33,7 +33,7 @@ const App: () => Node = () => {
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
-         <View
+        <View
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
           }}>

@@ -17,7 +17,8 @@ public class MyReactNativePackage implements ReactPackage  {
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         return Arrays.<NativeModule>asList(
-                new ToastModule(reactContext)
+                new ToastModule(reactContext),
+                new ConstantModule(reactContext)
         );
     }
 }
