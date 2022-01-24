@@ -2,7 +2,7 @@
 import React from 'react';
 import {NativeModules, View, Text, Button} from 'react-native';
 
-const {ToastModule} = NativeModules;
+const {ToastModule, ConstantModule} = NativeModules;
 
 const NewModuleButton = () => {
   function _showToast() {
@@ -18,6 +18,7 @@ const NewModuleButton = () => {
         <Button onPress={_showToast} title="Toast Button" />
       </View>
       <Text>Battery Level = {ToastModule.getBatteryLevel()} % </Text>
+      <Text>AppVersion = {JSON.stringify(ConstantModule.getCostant())}</Text>
     </>
   );
 };
