@@ -129,7 +129,8 @@ def vCode = (int)(((new Date().getTime()/1000) - 1451606400) / 10)
 //def vName = "1.0." + vCode.toString()
 
 def getVersionNameTimestamp() {
-    return new Date().format('yy.MM.dd-HH.mm')
+    def env = System.getenv('BUILD_ENV') != null ? "$System.env.BUILD_ENV" : "Local" 
+    return env + "-"+ new Date().format('yyyy.MM.dd-HH.mm')
 }
 
 def getVersionCodeTimestamp() {
