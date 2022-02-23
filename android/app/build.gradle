@@ -78,7 +78,7 @@ import com.android.build.OutputFile
  */
 
 project.ext.react = [
-    enableHermes: false,  // clean and rebuild if changing
+        enableHermes: true,  // clean and rebuild if changing
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -125,12 +125,12 @@ def enableHermes = project.ext.react.get("enableHermes", false);
  */
 def nativeArchitectures = project.getProperties().get("reactNativeDebugArchitectures")
 
-def vCode = (int)(((new Date().getTime()/1000) - 1451606400) / 10)
+def vCode = (int) (((new Date().getTime() / 1000) - 1451606400) / 10)
 //def vName = "1.0." + vCode.toString()
 
 def getVersionNameTimestamp() {
-    def env = System.getenv('BUILD_ENV') != null ? "$System.env.BUILD_ENV" : "Local" 
-    return env + "-"+ new Date().format('yyyy.MM.dd-HH.mm')
+    def env = System.getenv('BUILD_ENV') != null ? "$System.env.BUILD_ENV" : "Local"
+    return env + "-" + new Date().format('yyyy.MM.dd-HH.mm')
 }
 
 def getVersionCodeTimestamp() {
@@ -149,8 +149,10 @@ android {
         applicationId "com.reactnativemodule"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode = System.getenv('VERSION_CODE') != null ? "$System.env.VERSION_CODE" as Integer : vCode // 1
-        versionName = System.getenv('VERSION_NAME') != null ? "$System.env.VERSION_NAME" : "${getVersionNameTimestamp()}" // "1.0"
+        versionCode = System.getenv('VERSION_CODE') != null ? "$System.env.VERSION_CODE" as Integer : vCode
+        // 1
+        versionName = System.getenv('VERSION_NAME') != null ? "$System.env.VERSION_NAME" : "${getVersionNameTimestamp()}"
+        // "1.0"
     }
     splits {
         abi {
@@ -164,8 +166,14 @@ android {
         debug {
             storeFile file('debug.keystore')
             storePassword = System.getenv('PASSWORD') != null ? "$System.env.PASSWORD" : 'android'
-            keyAlias = System.getenv('ALIAS') != null ? "$System.env.ALIAS" :'androiddebugkey'
-            keyPassword = System.getenv('PASSWORD') != null ? "$System.env.PASSWORD" :'android'
+            keyAlias = System.getenv('ALIAS') != null ? "$System.env.ALIAS" : 'androiddebugkey'
+            keyPassword = System.getenv('PASSWORD') != null ? "$System.env.PASSWORD" : 'android'
+        }
+        release {
+            storeFile file('debug.keystore')
+            storePassword = System.getenv('PASSWORD') != null ? "$System.env.PASSWORD" : 'android'
+            keyAlias = System.getenv('ALIAS') != null ? "$System.env.ALIAS" : 'androiddebugkey'
+            keyPassword = System.getenv('PASSWORD') != null ? "$System.env.PASSWORD" : 'android'
         }
     }
     buildTypes {
@@ -176,35 +184,56 @@ android {
                     abiFilters nativeArchitectures.split(',')
                 }
             }
-
             buildConfigField('String', 'BUILD_ENV', '"development"')
+            buildConfigField('String', 'BUILD_KEY', '"Pritam"')
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-            
+
             buildConfigField('String', 'BUILD_ENV', '"production"')
+            buildConfigField('String', 'BUILD_KEY', '"Khose"')
         }
     }
 
-    // applicationVariants are e.g. debug, release
-    applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-            // For each separate APK per architecture, set a unique version code as described here:
-            // https://developer.android.com/studio/build/configure-apk-splits.html
-            // Example: versionCode 1 will generate 1001 for armeabi-v7a, 1002 for x86, etc.
-            def versionCodes = ["armeabi-v7a": 1, "x86": 2, "arm64-v8a": 3, "x86_64": 4]
-            def abi = output.getFilter(OutputFile.ABI)
-            if (abi != null) {  // null for the universal-debug, universal-release variants
-                output.versionCodeOverride =
-                        defaultConfig.versionCode * 1000 + versionCodes.get(abi)
-            }
-
+    flavorDimensions "default" // add this line
+    productFlavors { //add this object
+        dev {
+            signingConfig signingConfigs.release
+            // applicationIdSuffix ‘.dev’
+            // resValue “string”, “build_config_package”, “com.myapp”
+        }
+        qa {
+            signingConfig signingConfigs.release
+            // applicationIdSuffix ‘.qa’
+            // resValue “string”, “build_config_package”, “com.myapp”
+        }
+        uat {
+            signingConfig signingConfigs.release
+            // applicationIdSuffix ‘.uat’
+            // resValue “string”, “build_config_package”, “com.myapp”
         }
     }
+
+
+// applicationVariants are e.g. debug, release
+applicationVariants.all { variant ->
+    variant.outputs.each { output ->
+        // For each separate APK per architecture, set a unique version code as described here:
+        // https://developer.android.com/studio/build/configure-apk-splits.html
+        // Example: versionCode 1 will generate 1001 for armeabi-v7a, 1002 for x86, etc.
+        def versionCodes = ["armeabi-v7a": 1, "x86": 2, "arm64-v8a": 3, "x86_64": 4]
+        def abi = output.getFilter(OutputFile.ABI)
+        if (abi != null) {  // null for the universal-debug, universal-release variants
+            output.versionCodeOverride =
+                    defaultConfig.versionCode * 1000 + versionCodes.get(abi)
+        }
+
+    }
+}
 }
 
 dependencies {
@@ -215,16 +244,16 @@ dependencies {
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
-        exclude group:'com.facebook.fbjni'
+        exclude group: 'com.facebook.fbjni'
     }
 
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
-        exclude group:'com.facebook.flipper'
-        exclude group:'com.squareup.okhttp3', module:'okhttp'
+        exclude group: 'com.facebook.flipper'
+        exclude group: 'com.squareup.okhttp3', module: 'okhttp'
     }
 
     debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}") {
-        exclude group:'com.facebook.flipper'
+        exclude group: 'com.facebook.flipper'
     }
 
     if (enableHermes) {

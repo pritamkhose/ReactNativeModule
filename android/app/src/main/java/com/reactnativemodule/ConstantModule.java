@@ -47,6 +47,8 @@ public class ConstantModule extends ReactContextBaseJavaModule {
         constants.put("VERSION_NAME", BuildConfig.VERSION_NAME);
         constants.put("BUILD_TYPE", BuildConfig.BUILD_TYPE);
         constants.put("Date", new Date().toString());
+        constants.put("BUILD_KEY", BuildConfig.BUILD_KEY);
+        constants.put("FLAVOR", BuildConfig.FLAVOR);
         return constants;
     }
 }

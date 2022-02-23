@@ -42,6 +42,18 @@ Runs all the tests && Build Release
 
 Submit a new Beta Build to Crashlytics Beta
 
+### Android Product Flavour
+
+```sh
+yarn run install
+mkdir android/app/src/main/assets
+yarn run androidclean
+yarn run bundle
+yarn run androidapk
+```
+
+Runs all the tests && Build Release
+
 ### android deploy
 
 ```sh
