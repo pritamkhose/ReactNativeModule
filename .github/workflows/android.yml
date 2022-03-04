@@ -27,6 +27,8 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
+    - name: Create asset folder
+      run: mkdir android/app/src/main/assets
     - name: npm create bundle js
       run: |
           npm run bundle
