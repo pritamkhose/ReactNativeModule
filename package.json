@@ -9,6 +9,7 @@
     "test": "jest",
     "lint": "eslint .",
     "bundle": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle",
+    "androidbundle": "cd android && ./gradlew bundleRelease --no-daemon",
     "androidclean": "cd android && ./gradlew clean && cd ..",
     "androidrun": "react-native run-android --variant=devDebug",
     "androidapk": "cd android && ./gradlew assembleRelease && cd ..",
