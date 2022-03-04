@@ -18,7 +18,8 @@ public class MyReactNativePackage implements ReactPackage  {
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         return Arrays.<NativeModule>asList(
                 new ToastModule(reactContext),
-                new ConstantModule(reactContext)
+                new ConstantModule(reactContext),
+                new ConsoleModule(reactContext)
         );
     }
 }

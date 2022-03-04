@@ -10,7 +10,9 @@
     "lint": "eslint .",
     "bundle": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle",
     "androidclean": "cd android && ./gradlew clean && cd ..",
-    "androidapk": "cd android && ./gradlew assembleRelease && cd .."
+    "androidrun": "react-native run-android --variant=devDebug",
+    "androidapk": "cd android && ./gradlew assembleRelease && cd ..",
+    "androiddevapk": "cd android && ./gradlew assembleDevRelease && cd .."
   },
   "dependencies": {
     "react": "17.0.2",
